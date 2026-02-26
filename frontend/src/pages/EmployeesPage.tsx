@@ -206,7 +206,7 @@ function EmployeeModal({ employee, onClose }: { employee: any; onClose: () => vo
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const skills = formData.skills.split(',').map(s => s.trim()).filter(Boolean);
+    const skills = formData.skills.split(',').map((s: string) => s.trim()).filter(Boolean);
     mutation.mutate({ ...formData, skills });
   };
 

@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import api from '../lib/api';
-import { Users, CheckSquare, TrendingUp, Activity, Clock, Award, AlertCircle, ArrowUp, ArrowDown } from 'lucide-react';
+import { Users, CheckSquare, TrendingUp, Activity, Clock, Award, AlertCircle, ArrowUp } from 'lucide-react';
 
 export function DashboardPage() {
   const { data: metrics, isLoading } = useQuery({

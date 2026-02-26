@@ -7,12 +7,12 @@ interface SkillGap {
   reason: string;
 }
 
-interface EmployeeSkillGap {
-  employeeId: number;
-  employeeName: string;
-  role: string;
-  currentSkills: string[];
-  missingSkills: SkillGap[];
+// interface EmployeeSkillGap {
+//   employeeId: number;
+//   employeeName: string;
+//   role: string;
+//   currentSkills: string[];
+//   missingSkills: SkillGap[];
   skillGapScore: number;
 }
 
