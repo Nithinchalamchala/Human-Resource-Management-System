@@ -13,8 +13,8 @@ interface SkillGap {
 //   role: string;
 //   currentSkills: string[];
 //   missingSkills: SkillGap[];
-  skillGapScore: number;
-}
+//   skillGapScore: number;
+// }
 
 interface OrganizationSkillGap {
   skill: string;
