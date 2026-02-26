@@ -5,16 +5,26 @@ import { logger } from '../utils/logger';
 dotenvConfig();
 
 const requiredEnvVars = [
-  'DB_HOST',
-  'DB_PORT',
-  'DB_NAME',
-  'DB_USER',
   'JWT_SECRET',
   'JWT_REFRESH_SECRET',
 ];
 
 export function validateEnv(): void {
   const missing: string[] = [];
+
+  // Check if we have DATABASE_URL or individual DB variables
+  const hasDatabaseUrl = !!process.env.DATABASE_URL;
+  const hasIndividualDbVars = !!(
+    process.env.DB_HOST &&
+    process.env.DB_PORT &&
+    process.env.DB_NAME &&
+    process.env.DB_USER
+  );
+
+  if (!hasDatabaseUrl && !hasIndividualDbVars) {
+    logger.error('Missing database configuration: provide either DATABASE_URL or DB_HOST, DB_PORT, DB_NAME, DB_USER');
+    process.exit(1);
+  }
 
   for (const envVar of requiredEnvVars) {
     if (process.env[envVar] === undefined) {
@@ -31,16 +41,35 @@ export function validateEnv(): void {
   logger.info('Environment variables validated successfully');
 }
 
+// Parse DATABASE_URL if provided (for Render deployment)
+function parseDatabaseUrl(url: string) {
+  try {
+    const parsed = new URL(url);
+    return {
+      host: parsed.hostname,
+      port: parseInt(parsed.port || '5432', 10),
+      name: parsed.pathname.slice(1), // Remove leading slash
+      user: parsed.username,
+      password: parsed.password,
+    };
+  } catch (error) {
+    logger.error('Failed to parse DATABASE_URL:', error);
+    throw error;
+  }
+}
+
 export const config = {
   port: parseInt(process.env.PORT || '3000', 10),
   nodeEnv: process.env.NODE_ENV || 'development',
-  database: {
-    host: process.env.DB_HOST!,
-    port: parseInt(process.env.DB_PORT || '5432', 10),
-    name: process.env.DB_NAME!,
-    user: process.env.DB_USER!,
-    password: process.env.DB_PASSWORD!,
-  },
+  database: process.env.DATABASE_URL
+    ? parseDatabaseUrl(process.env.DATABASE_URL)
+    : {
+        host: process.env.DB_HOST!,
+        port: parseInt(process.env.DB_PORT || '5432', 10),
+        name: process.env.DB_NAME!,
+        user: process.env.DB_USER!,
+        password: process.env.DB_PASSWORD!,
+      },
   jwt: {
     secret: process.env.JWT_SECRET!,
     expiresIn: process.env.JWT_EXPIRES_IN || '1h',
