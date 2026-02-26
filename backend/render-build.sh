@@ -3,8 +3,8 @@ set -e
 
 echo "🔧 Starting Render build process..."
 
-echo "📦 Installing dependencies..."
-npm install
+echo "📦 Installing dependencies (including dev dependencies for build)..."
+npm install --include=dev
 
 echo "🏗️  Building TypeScript..."
 npm run build
