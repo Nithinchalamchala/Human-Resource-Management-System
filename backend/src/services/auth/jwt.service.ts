@@ -23,12 +23,12 @@ export class JWTService {
   static generateTokens(payload: TokenPayload): AuthTokens {
     try {
       const accessToken = jwt.sign(payload, config.jwt.secret, {
-        expiresIn: config.jwt.expiresIn as string,
-      });
+        expiresIn: config.jwt.expiresIn,
+      } as jwt.SignOptions);
 
       const refreshToken = jwt.sign(payload, config.jwt.refreshSecret, {
-        expiresIn: config.jwt.refreshExpiresIn as string,
-      });
+        expiresIn: config.jwt.refreshExpiresIn,
+      } as jwt.SignOptions);
 
       return {
         accessToken,
