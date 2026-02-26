@@ -56,7 +56,7 @@ export class DashboardController {
       );
       const averageProductivityScore = avgScoreResult.rows[0].avg_score 
         ? parseFloat(avgScoreResult.rows[0].avg_score).toFixed(2) 
-        : 0;
+        : '0';
 
       // Get tasks completed this week
       const tasksThisWeekResult = await pool.query(
